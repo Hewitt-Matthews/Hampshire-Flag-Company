@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42" height="43" viewBox="0 0 42 43">
+  <g id="Group_6100" data-name="Group 6100" transform="translate(0 43) rotate(-90)">
+    <ellipse id="Ellipse_10" data-name="Ellipse 10" cx="21.5" cy="21" rx="21.5" ry="21" fill="#ce0024"/>
+    <path id="Icon_metro-arrow-left" data-name="Icon metro-arrow-left" d="M5.073,10.911.281,6.251a.914.914,0,0,1,0-1.318L5.073.273a.978.978,0,0,1,1.355,0,.914.914,0,0,1,0,1.318L3.272,4.66h9.187a.932.932,0,1,1,0,1.864H3.272L6.428,9.593a.914.914,0,0,1,0,1.318A.978.978,0,0,1,5.073,10.911Z" transform="translate(15.93 15.408)" fill="#fff"/>
+  </g>
+</svg>

@@ -1,0 +1,149 @@
+.woocommerce-cart header.entry-header {
+    margin-top: 3em!important;
+    text-align: center;
+}
+
+#content .woocommerce {
+	display: grid;
+    grid-template-columns: 66% 1fr;
+    gap: 2em;
+}
+
+#content .woocommerce .woocommerce-notices-wrapper,
+.flexible-shipping-notice-container  {
+    grid-column: 1 / -1;
+}
+
+/* Checkout Box */
+
+#content .woocommerce .cart_totals {
+    width: 100%;
+    position: sticky;
+    top: 52px;
+	padding: 2em 2em 0 2em;
+    background: #F4F4F4;
+}
+
+#content .woocommerce .cart_totals h2 {
+    text-align: center;
+}
+
+#content .woocommerce .cart_totals table.shop_table th,
+#content .woocommerce .cart_totals table.shop_table td {
+    background-color: #f4f4f4;
+    border-bottom: solid 1px;
+}
+
+#content .woocommerce .cart_totals table.shop_table .cart-subtotal th,
+#content .woocommerce .cart_totals table.shop_table .cart-subtotal td {
+	border-top: solid 1px;
+	border-bottom-width: 2px;
+}
+
+#content .woocommerce .cart_totals .checkout-button {
+    text-align: center;
+    background-color: rgb(var(--secondary));
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#content .woocommerce .cart_totals .checkout-button::after {
+    content: none;
+}
+
+/* Product Table */
+
+#content .woocommerce form.woocommerce-cart-form,
+#content .woocommerce form.woocommerce-cart-form table {
+    margin-bottom: 0;
+}
+
+.woocommerce-cart-form table.shop_table th {
+    background-color: #fff!important;
+    border-bottom: solid 2px;
+}
+
+.woocommerce-cart-form table.shop_table td {
+    background-color: #fff!important;
+    border-bottom: solid 1px!important;
+}
+
+.woocommerce-cart-form table.shop_table thead th {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.woocommerce-cart-form table.shop_table td.actions {
+    padding: 2em 0;
+    border-top: none;
+}
+
+/* Coupon */
+
+#content .coupon {
+    display: flex;
+    padding: 5px;
+    border: solid 1px rgb(var(--secondary));
+}
+
+#content .coupon #coupon_code {
+    background-color: #fff;
+    box-shadow: none;
+}
+
+#content .coupon button {
+    background-color: rgb(var(--secondary));
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+/* Need Help Section */
+
+#need-help {
+    grid-column: 1 / -1;
+	margin: 3em calc(calc(calc(100vw - min(85vw, var(--siteMaxWidth))) / -1 ) / 2) 0;
+}
+
+
+/* Hide Burgees variation price as it could be a negative number */
+tr.woocommerce-cart-form__cart-item.cart_item dd.variation-Artwork + dt + dd {
+    display: none;
+}
+
+.cart-collaterals .cross-sells {
+	width: 100%!important;
+}
+
+@media only screen and (max-width: 980px) {
+	
+
+	#content .woocommerce {
+		grid-template-columns: 1fr;
+	}
+
+	
+}
+
+@media only screen and (max-width: 768px) {
+	
+	.woocommerce-cart-form table.shop_table td {
+		border-bottom: none!important;
+	}
+	
+	.woocommerce-cart-form table.cart td.product-remove a.remove {
+		top: 1em;
+		right: 0;
+	}
+	
+	td.product-thumbnail {
+		margin-left: auto;
+		margin-right: 2em;
+		max-width: 100px;
+	}
+	
+}

@@ -1,0 +1,230 @@
+/* Page BG */
+
+.tax-product_cat #page,
+.woocommerce-shop #page {
+    background-color: #F8F9FA;
+}
+
+.tax-product_cat #main > header,
+.post-type-archive-product #main > header {
+ 	margin: 0 calc(calc(calc(100vw - min(var(--siteMaxWidth), 85vw)) / 2) / -1) 1em!important;
+    position: relative;
+    overflow: hidden;
+    padding: 5em calc(calc(100vw - min(var(--siteMaxWidth), 85vw)) / 2);
+}
+
+.tax-product_cat #main > header::after,
+.post-type-archive-product #main > header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / 50%);
+    z-index: 1;
+}
+
+.tax-product_cat #main > header > img,
+.post-type-archive-product #main > header > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    z-index: 1;
+	height: 100%;
+    object-fit: cover;
+}
+
+.tax-product_cat #main > header.woocommerce-products-header h1,
+.tax-product_cat #main > header .term-description,
+.post-type-archive-product #main > header.woocommerce-products-header h1,
+.post-type-archive-product #main > header .term-description {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+}
+
+/* Alphabet Filter */
+
+.wc-product-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 2em 0 1em;
+}
+
+.wc-product-filter p,
+.wc-product-filter ul {
+    margin: 0;
+}
+
+.wc-product-filter ul {
+    display: flex;
+	flex-wrap: wrap;
+    list-style: none;
+    gap: 1em;
+    font-weight: 600;
+}
+
+.wc-product-filter ul a {
+    color: rgb(var(--primary));
+}
+
+#primary.sorted-by-letter .storefront-breadcrumb ~ *,
+#primary.sorted-by-letter ul.products + div,
+#primary.sorted-by-letter ul.subcategories {
+    display: none;
+}
+
+/* Products Loop */
+
+.et-db #et-boc ul.products,
+ul.products,
+ul.subcategories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+    gap: 2em;
+	margin-bottom: 2em!important;
+	margin-left: 0;
+	position: relative;
+    padding-top: 5em;
+}
+
+ul.subcategories::before {
+    content: "Subcategories";
+    font-size: min(32px, 9vw);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: absolute;
+    top: 0;
+}
+
+.et-db #et-boc ul.products:has(li)::before,
+ul.products:has(li)::before {
+    content: "Products"!important;
+    font-size: min(32px, 9vw);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: absolute;
+    top: 0;
+}
+
+
+.et-db #main.site-main #et-boc ul.products li.product,
+#main.site-main ul.products li.product,
+#main.site-main ul.subcategories > li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+	align-items: center;
+    width: 100%!important;
+    margin: 0!important;
+    background-color: #fff;
+    padding: 1em;
+}
+
+#main.site-main ul.subcategories > li > a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+li.product-category.product > a > div > img {
+    min-height: 230px;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.et-db #main.site-main #et-boc ul.products li.product .subheading,
+#main.site-main ul.products li.product .subheading,
+#main.site-main ul.subcategories > li .subheading {
+	color: #000;
+    margin: 0;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+/* If a cat has a description, increase height to maintain the level */
+#main.site-main ul.subcategories:has(li .category > div p:nth-of-type(2)) > li .category {
+    flex: 0 1 350px;
+}
+
+#main.site-main ul.subcategories > li .category {
+    text-align: center;
+    flex: 0 1 100px;
+    display: grid;
+}
+
+.et-db #main.site-main #et-boc ul.products li.product h2,
+#main.site-main ul.products li.product h2,
+#main.site-main ul.subcategories > li h2 {
+	margin-top: 1em;
+    letter-spacing: 2px;
+	font-size: 20px;
+    font-weight: 700;
+    color: #333;
+	text-align: center;
+}
+
+.et-db #main.site-main #et-boc ul.products li.product h2 mark,
+#main.site-main ul.products li.product h2 mark,
+#main.site-main ul.subcategories > li h2 mark {
+    display: none;
+}
+
+.et-db #main.site-main #et-boc ul.products li.product p,
+#main.site-main ul.products li.product p,
+#main.site-main ul.subcategories > li p {
+    color: #333;
+    font-size: 16px;
+}
+
+.et-db #main.site-main #et-boc ul.products li.product .starting-from, 
+#main.site-main ul.products li.product .starting-from, 
+#main.site-main ul.subcategories > li .starting-from {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 14px;
+	color: #333;
+}
+
+ul.products li.product .price,
+ul.products li.product .price .starting-from  {
+    font-size: 20px;
+    color: rgb(var(--secondary))!important;
+}
+
+#main ul.products::before,
+#main ul.products::after {
+	content: none;
+}
+
+/* Align Category/Subcategory Titles */
+
+#main.site-main ul.subcategories > li h2.woocommerce-loop-category__title {
+    display: none;
+}
+
+#main.site-main ul.subcategories > li .category .primary-btn {
+	align-self: end;
+	justify-self: center;
+}
+
+@media only screen and (max-width: 980px) {
+	
+	#main.site-main ul.subcategories > li > a {
+		justify-content: flex-start;
+	}
+	
+	li.product-category.product > a > div > img {
+		min-height: auto;
+		height: 200px;
+		max-height: none;
+	}
+	
+	#main.site-main ul.subcategories > li .category {
+		flex: 1!important;
+	}
+	
+}

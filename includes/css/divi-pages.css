@@ -1,0 +1,14 @@
+/* Divi Row Width */
+.et-db #main #et-boc .et-l .et_pb_section .et_pb_row {
+	max-width: var(--siteMaxWidth);
+	width: var(--siteWidth);
+}
+
+/* Subheading on Divi Pages */
+.subheading .et_pb_text_inner {
+	text-transform: uppercase;
+	color: rgb(var(--primary))!important;
+	font-weight: 500;
+	letter-spacing: 1px;
+	font-size: 14px;
+}

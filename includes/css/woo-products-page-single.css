@@ -1,0 +1,763 @@
+/****************************************************************
+ * Product Options Adjustments
+ ****************************************************************/
+
+.single-product div.product {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%,300px), 1fr));
+    gap: 2em;
+	overflow: unset!important;
+	border-bottom: solid 1px #eee;
+    padding-bottom: 3em;
+}
+.single-product div.product p.price .amount,
+ul.products li.product .price .amount {
+    font-size: 20px;
+    color: rgb(var(--secondary));
+}
+
+.single-product div.product::before,
+.single-product div.product::after {
+	content: none!important;
+}
+
+nav.storefront-product-pagination {
+    display: none!important;
+}
+
+.single-product div.product > div {
+    float: none!important;
+    width: 100%!important;
+    margin: 0!important;
+}
+
+.single-product div.product .woocommerce-product-gallery {
+    height: max-content;
+    position: sticky!important;
+    top: 2em;
+}
+
+@media only screen and (max-width: 768px) {
+	
+	.single-product div.product .woocommerce-product-gallery {
+		position: relative!important;
+		top: 0em;
+	}	
+	
+}
+
+
+/* Center Product Image */
+
+.single-product #page div.product .woocommerce-product-gallery img {
+    margin: 0 auto;
+}
+
+/* Remove tags */
+
+.single-product #page .product_meta span.tagged_as {
+    display: none;
+}
+
+/* Sale Product Styles */
+
+li.product span.onsale {
+    position: relative;
+}
+
+/* Fall back if :has() isn't supported */
+span.onsale {
+    position: absolute;
+	text-align: center;
+	background-color: rgb(var(--secondary));
+	color: #fff;
+	text-decoration: underline;
+	border-color: #fff;
+	right: 0;
+}
+
+@media only screen and (min-width: 1135px) {
+
+	div.product:has(span.onsale) span.onsale {
+		position: relative;
+		grid-column: 1 / -1;
+	}
+
+	div.product:has(span.onsale) .summary {
+		grid-column: 2 / 4;
+	}
+	
+}
+
+@media only screen and (max-width: 1135px) {
+	
+	div.product span.onsale {
+		position: relative;
+		grid-column: 1 / -1;
+	}
+
+	
+}
+
+.single-product #page #primary .gform_heading {
+    display: none;
+}
+
+section.up-sells.upsells.products {
+    margin-top: 3em;
+    margin-bottom: -2em;
+}
+
+.gform_wrapper.gravity-theme fieldset:has(.gfield_description) {
+    display: grid;
+}
+
+.gform_wrapper.gravity-theme fieldset .gfield_description {
+    order: -1;
+    padding-top: 0;
+    margin-bottom: 1em;
+	font-weight: 300;
+}
+
+.gform_wrapper.gravity-theme fieldset:has(.gfield_description) legend {
+    margin-bottom: 0;
+}
+
+/****************************************************************
+ * Price Display
+ ****************************************************************/
+
+.single-product div.product p.price {
+	display: none;
+}
+
+.single-product div.product span.price>.amount,
+.single-product div.product span.price .starting-from,
+ul.products li.product .price,
+ul.products li.product .price .starting-from  {
+    font-size: 20px;
+    color: rgb(var(--secondary));
+}
+
+.single-product div.product p.price .starting-from {
+	font-weight: 500;
+}
+
+.single-product div.product span.price .starting-from {
+    font-size: 32px;
+    font-weight: 500;
+	color: rgb(var(--secondary));
+}
+
+/****************************************************************
+ * Price Display If variable product has Gform
+ ****************************************************************/
+
+.variations_form:has(.gform_variation_wrapper) {
+    display: flex;
+    flex-direction: column;
+}
+
+.variations_form:has(.gform_variation_wrapper) .single_variation .price {
+    display: block!important;
+}
+
+.variations_form:has(.gform_variation_wrapper) 
+ .single_variation_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.variations_form:has(.gform_variation_wrapper) .woocommerce-variation.single_variation {
+    order: 2;
+}
+
+.variations_form:has(.gform_variation_wrapper) .woocommerce-variation-add-to-cart.variations_button.woocommerce-variation-add-to-cart-enabled {
+    order: 3;
+}
+
+.variations_form:has(.gform_variation_wrapper) .gform_variation_wrapper .product_totals {
+    display: none;
+}
+
+/****************************************************************
+ * add_to_cart_button
+ ****************************************************************/
+
+.single-product div.product .variations_button {
+    display: flex;
+}
+
+.single_add_to_cart_button {
+	font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.og-price {
+    margin-right: 1em;
+    font-weight: 600;
+    text-decoration: line-through;
+}
+
+.product_totals ul li:not(.product_totals ul li:last-of-type) {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+    transform: scale(0);
+}
+
+/****************************************************************
+ * Product Add-on Swatches
+ ****************************************************************/
+
+.single-product .gfield_calculation {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+	transform: scale(0);
+}
+
+.single-product .valid-selection-message {
+    display: inline-block;
+    padding: 1em;
+    border-radius: 5px;
+    margin-top: 1em;
+	font-weight: 500;
+	border: 1px solid black;
+    box-shadow: 0 0 2px 0;
+}
+
+.single-product .product .gchoice,
+.wc-pao-addon .wc-pao-addon-wrap {
+    position: relative;
+    padding: 0.25em;
+    border: solid 1px #dddddd;
+	height: max-content;
+}
+
+.single-product .product .gform_wrapper.gravity-theme .gfield-choice-input,
+.wc-pao-addon .wc-pao-addon-wrap input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+}
+
+.single-product .product .gform_wrapper.gravity-theme .gfield-choice-input + label,
+.wc-pao-addon .wc-pao-addon-wrap input + label {
+	font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.25em;
+    height: 100%;
+	max-width: none;
+    display: block!important;
+    margin: 0;
+    background-color: #f1f1f1;
+}
+
+.single-product .product .gform_wrapper.gravity-theme .gfield-choice-input,
+.wc-pao-addon .wc-pao-addon-wrap input:hover {
+    cursor: pointer;
+}
+
+.single-product .product .gchoice:has(input:checked),
+.single-product .product .gform_wrapper.gravity-theme input:checked + label,
+.wc-pao-addon .wc-pao-addon-wrap:has(input:checked),
+.wc-pao-addon .wc-pao-addon-wrap input:checked + label {
+    background-color: rgb(var(--secondary));
+    color: #fff;
+	display: grid;
+}
+
+.single-product .product .gform_wrapper.gravity-theme input:checked + label {
+    background-color: rgb(var(--secondary));
+    color: #fff;
+}
+
+.single-product .product .gfield_radio,
+.single-product .product .gfield_checkbox,
+.wc-pao-addon {
+    display: flex;
+    flex-wrap: wrap;
+   	gap: 0.5em;
+}
+
+.single-product .product .size-option .gfield_radio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+}
+
+span.formattedTotalPrice.ginput_total {
+    font-size: 32px;
+    font-weight: 500;
+    color: rgb(var(--secondary));
+}
+
+.wc-pao-addon > p {
+    width: auto;
+	margin: 0;
+}
+
+.wc-pao-addon > label {
+    flex: 1 1 100%;
+	text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-weight: 600!important;
+    color: #6c6c6c;
+}
+
+/****************************************************************
+ *  Finishing Options Swatches
+ ****************************************************************/
+
+.finishing-options .gchoice:has(input[value="Rope and Toggle|0"]:checked) label::after,
+.finishing-options .gchoice:has(input[value="Nickel Eyelets|2.95"]:checked) label::after,
+.finishing-options .gchoice:has(input[value="Plastic D-Rings|2.95"]:checked) label::after,
+.finishing-options .gchoice:has(input[value="Inglefield Clips|7.95"]:checked) label::after,
+.finishing-options .gchoice:has(input[value="18mm Pole Sleeve|8.5"]:checked) label::after,
+.finishing-options .gchoice:has(input[value="32mm Ceremonial Pole Sleeve|4.5"]:checked) label::after,
+fieldset[data-field="Add anti-fray netting?(Required)"] .gchoice:has(input[value*="Yes"]:checked) label::after,
+fieldset[data-field="Finishing(Required)"] input[value="Nickel Eyelets|0"]:checked + label::after {
+    content: "";
+    min-width: 130px;
+    height: 130px;
+    position: relative;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+	cursor: pointer;
+}
+
+
+.finishing-options .gchoice:has(input[value="Rope and Toggle|0"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/05/SewnUnion_2.png);
+}
+
+.finishing-options .gchoice:has(input[value="Nickel Eyelets|2.95"]:checked) label::after,
+fieldset[data-field="Finishing(Required)"] input[value="Nickel Eyelets|0"]:checked + label::after {
+	background-image: url(/wp-content/uploads/2023/04/Eyelets.png);
+}
+
+.finishing-options .gchoice:has(input[value="Plastic D-Rings|2.95"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/04/D-Rings.png);
+}
+
+.finishing-options .gchoice:has(input[value="Inglefield Clips|7.95"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/04/Enfielded-Clips.png);
+}
+
+.finishing-options .gchoice:has(input[value="18mm Pole Sleeve|8.5"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/08/WebImages_FlagFinishings_PolePoket_CloseUp_600px.png);
+}
+
+.finishing-options .gchoice:has(input[value="32mm Ceremonial Pole Sleeve|4.5"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/08/WebImages_FlagFinishings_PolePoket_CloseUp_600px.png);
+}
+
+fieldset[data-field="Add anti-fray netting?(Required)"] .gchoice:has(input[value*="Yes"]:checked) label::after {
+	background-image: url(/wp-content/uploads/2023/04/Anti-Fray.png);
+}
+
+/****************************************************************
+ *  Golf pin flags finsihing Options Swatches
+ ****************************************************************/
+
+.postid-516758 #page [data-attribute_name="attribute_pa_finishing"] .swatch.selected {
+ height: auto;
+ text-align: left;
+}
+
+
+.postid-516758 #page [data-attribute_name="attribute_pa_finishing"] .swatch.selected .text {
+    display: grid!important;
+}
+
+.postid-516758 [data-attribute_name="attribute_pa_finishing"] .swatch.selected .text::after {
+    content: ""!important;
+    min-width: 130px;
+    height: 130px;
+    position: relative;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.postid-516758 [data-attribute_name="attribute_pa_finishing"] .swatch.selected.swatch-tie-on .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/GolfPins_Ties_Finishing.png);
+}
+.postid-516758 [data-attribute_name="attribute_pa_finishing"] .swatch.selected.swatch-swivel .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/GolfPins_Swivels_Finishing.png);
+}
+.postid-516758 [data-attribute_name="attribute_pa_finishing"] .swatch.selected.swatch-velcro .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/GolfPins_Velcro_Finishing.png);
+}
+
+/****************************************************************
+ *  Event Flags Options Images
+ ****************************************************************/
+
+#page .product_cat-event-flag-systems :is([data-attribute_name="attribute_pa_ground-spike"], [data-attribute_name="attribute_pa_base"], [data-attribute_name="square-metal-base"]) .swatch.selected:not(.swatch-label.swatch-no-base) {
+ height: auto;
+ text-align: left;
+}
+
+
+#page .product_cat-event-flag-systems :is([data-attribute_name="attribute_pa_ground-spike"], [data-attribute_name="attribute_pa_base"], [data-attribute_name="square-metal-base"]) .swatch.selected:not(.swatch-label.swatch-no-base) .text {
+    display: grid!important;
+}
+
+.product_cat-event-flag-systems :is([data-attribute_name="attribute_pa_ground-spike"], [data-attribute_name="attribute_pa_base"], [data-attribute_name="square-metal-base"]) .swatch.selected:not(.swatch-label.swatch-no-base) .text::after {
+    content: ""!important;
+    min-width: 130px;
+    height: 130px;
+    position: relative;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_ground-spike"] .swatch.selected.swatch-ground-spike .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/HFC-Ground-Spike.jpg);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_ground-spike"] .swatch.selected.swatch-premium-ground-spike .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/Premium-Groundspike.jpg);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_base"] .swatch.selected.swatch-car-wheel-base .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/Car_Wheel_Base__84285.jpg);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_base"] .swatch.selected.swatch-concrete-base-25kg .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/25kg-Concrete-Base.jpg);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_base"] .swatch.selected.swatch-water-base .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/HFC-Feather-Water-Base.jpg);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_base"] .swatch.selected.swatch-x-base .text::after {
+	 background-image: url(/wp-content/uploads/2023/08/X-Base.png);
+}
+
+.product_cat-event-flag-systems [data-attribute_name="attribute_pa_base"] .swatch.selected.swatch-square-metal-base .text::after {
+	 background-image: url(/wp-content/uploads/2023/09/metalbase.webp);
+}
+
+
+
+
+/****************************************************************
+ * Product Varitaion Swatches
+ ****************************************************************/
+
+.woocommerce.single-product #page form.cart.variations_form .tawcvs-swatches .swatch-item-wrapper {
+	margin-right: 0!important;
+	margin-bottom: 0!important;
+}
+
+.woocommerce div.product form.cart.variations_form .tawcvs-swatches {
+    margin: 0 0 0.5em;
+    gap: 1em;
+}
+
+.woocommerce div.product form.cart.variations_form .tawcvs-swatches .swatch__tooltip,
+.woocommerce.archive form.cart.variations_form .tawcvs-swatches .swatch__tooltip,
+.woocommerce.single-product form.cart.variations_form .tawcvs-swatches .swatch__tooltip {
+	background: #fff!important;
+    color: #333!important;
+    box-shadow: 0 0 10px 0 #808080;
+}
+
+.woocommerce div.product form.cart.variations_form .tawcvs-swatches .swatch__tooltip::after,
+.woocommerce.archive form.cart.variations_form .tawcvs-swatches .swatch__tooltip::after,
+.woocommerce.single-product form.cart.variations_form .tawcvs-swatches .swatch__tooltip::after {
+	background: #fff!important;
+}
+
+/* Image swatches */
+.woocommerce div.product form.cart.variations_form .variation-selector.variation-select-image + .tawcvs-swatches .swatch {
+    width: 100px;
+    height: 100px;
+    background-position: center;
+}
+
+.woocommerce.single-product form.cart.variations_form .variation-selector.variation-select-image + .tawcvs-swatches .swatch.selected:before {
+	background-color: rgb(var(--primary) / 0%);
+}
+
+.variations th.label label,
+.swatch-label {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.variations th.label label::after {
+    content: " (Required)";
+    color: rgb(var(--primary));
+    font-size: 12px;
+}
+
+.variations th.label label span {
+    background-color: rgb(var(--primary));
+    color: #fff;
+    text-transform: lowercase;
+    width: 18px;
+    height: 18px;
+    display: inline-grid;
+    place-content: center;
+    line-height: 1;
+    border-radius: 50%;
+    margin-left: 6px;
+}
+
+.variations th.label label span:hover {
+	cursor: pointer;
+}
+
+.variations th.label .description {
+    max-height: 0;
+    overflow: hidden;
+    transition: 300ms;
+}
+
+/* .variations th.label .description.active {
+	padding: 0.5rem;
+	box-shadow: 0 0 10px 0 #808080;
+} */
+
+.swatch-label::before {
+	border: solid 2px rgb(var(--secondary));
+}
+
+.variations .swatch-control.radio-select ul {
+	display: flex;
+/*     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
+    gap: 2em;
+	flex-wrap: wrap;
+}
+
+.variations .swatch-control.radio-select ul li {
+    position: relative;
+    text-align: center;
+}
+
+.variations .swatch-control.radio-select ul li input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+	top: 0;
+    left: 0;
+}
+
+.variations .swatch-control.radio-select li input:hover {
+	cursor: pointer;
+}
+
+.variations .swatch-control.radio-select li.disabled input:hover {
+	cursor: not-allowed;
+}
+
+.variations .swatch-control.radio-select ul li input:checked ~ label {
+	background-color: rgb(var(--secondary));
+	color: #fff;
+}
+
+.variations .swatch-control.radio-select li label {
+	display: block;
+    margin: 0;
+	border: solid 2px #000;
+    padding: 1em;
+	transition: 250ms;
+}
+
+/* Colour of selected variation */
+
+.woocommerce div.product form.cart.variations_form .tawcvs-swatches .swatch.selected:before,
+.woocommerce div.product form.cart.variations_form .tawcvs-swatches .swatch-show-more.selected:before,
+.woocommerce.archive form.cart.variations_form .tawcvs-swatches .swatch.selected:before,
+.woocommerce.archive form.cart.variations_form .tawcvs-swatches .swatch-show-more.selected:before,
+.woocommerce.single-product form.cart.variations_form .tawcvs-swatches .swatch.selected:before,
+.woocommerce.single-product form.cart.variations_form .tawcvs-swatches .swatch-show-more.selected:before {
+    border-color: rgb(var(--secondary))!important;
+    border-width: 2px;
+    background-color: rgb(var(--secondary));
+}
+
+.swatch-item-wrapper .swatch.selected .text {
+    position: relative;
+    z-index: 9;
+    color: #fff;
+}
+
+/* Full Set of Signal flags */
+
+.postid-541922 #page .tawcvs-swatches.oss-[data-attribute_name="attribute_pa_size"] {
+    display: grid!important;
+    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+}
+
+.postid-541922 #page .tawcvs-swatches.oss-[data-attribute_name="attribute_pa_size"] .swatch {
+    width: 100%;
+}
+
+/****************************************************************
+ * Product Description Section
+ ****************************************************************/
+
+.product-description {
+    margin-top: 3em;
+}
+
+/****************************************************************
+ * Product Specifications Table Section
+ ****************************************************************/
+
+tr.woocommerce-product-attributes-item th,
+tr.woocommerce-product-attributes-item td {
+    border-bottom: solid 1px #000;
+    background-color: #fff!important;
+}
+
+.product-type-variable ~ div.product-after-element:has(table.woocommerce-product-attributes:nth-of-type(2)) table.woocommerce-product-attributes:nth-of-type(1) {
+    margin: 0;
+}
+
+.product-type-variable ~ div.product-after-element table.woocommerce-product-attributes:nth-of-type(2) .woocommerce-product-attributes-item--weight,
+.product-type-variable ~ div.product-after-element table.woocommerce-product-attributes:nth-of-type(2) .woocommerce-product-attributes-item--dimensions {
+    display: none;
+}
+
+/****************************************************************
+ * Product Discount Table & Dimensions Table
+ ****************************************************************/
+
+.discount-table > div,
+.dimensions-table > div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+}
+
+.discount-table > .table-head div,
+.dimensions-table > .table-head div {
+    font-size: min(20px, 4vw);
+    font-weight: 600;
+}
+
+.discount-table > div > div,
+.dimensions-table > div > div {
+    border-bottom: solid 1px;
+    border-right: solid 1px;
+}
+
+.discount-table > div > div:first-of-type,
+.dimensions-table > div > div:first-of-type {
+    border-left: solid 1px;
+	font-weight: 600;
+}
+
+.discount-table > div:first-of-type > div,
+.dimensions-table > div:first-of-type > div {
+    border-top: solid 1px;
+}
+
+/****************************************************************
+ * Product Summary Section
+ ****************************************************************/
+
+.product-after-element {
+    margin-top: 3em;
+}
+
+.product-after-element>h2 {
+	--paddingBottom: 15px;
+	position: relative;
+    border-bottom: solid 3px #707070;
+    padding-bottom: var(--paddingBottom);
+	font-size: 1.618em;
+}
+
+.product-after-element>h2:hover {
+	cursor: pointer;
+}
+
+.product-after-element>h2::after,
+.product-after-element>h2::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - calc(var(--paddingBottom) / 2));
+    right: 0;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 4px;
+    background-color: #000;
+}
+
+.product-after-element>h2::before {
+	transform: translateX(-50%) rotate(90deg);
+	transition: 300ms;
+    transition-timing-function: cubic-bezier(0.65, 0.45, 0.25, 1.5);
+}
+
+.product-after-element>h2.active::before {
+	transform: translateX(-50%) rotate(0deg);
+}
+
+.product-after-element>div {
+    max-height: 0px;
+    overflow: hidden;
+    transition: 300ms;
+}
+
+/* Related Products  */
+
+.related.products {
+	margin: 3em calc(calc(calc(100vw - min(85vw, var(--siteMaxWidth))) / -1 ) / 2) 0;
+    background-color: #F8F9FA;
+    padding: 3em 0;
+}
+
+.related.products>h2,
+.related.products .products {
+    max-width: var(--siteMaxWidth);
+    width: var(--siteWidth);
+    margin: 0 auto;
+}
+
+.related.products .products {
+    display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%,250px), 1fr));
+    gap: 2em;
+}
+
+#main .related.products .products li.product {
+    float: none!important;
+    width: 100%!important;
+    margin: 0!important;
+    background-color: #fff;
+    padding: 2em;
+}
+
+.related.products ul.products::before,
+.related.products ul.products::after {
+	content: none!important;
+}
+
+/* ZAKEKE */
+.woocommerce-variation-add-to-cart button.zakeke-customize-button {
+	margin-right: 15px;
+}

@@ -1,0 +1,168 @@
+.woocommerce-account #main header {
+    margin-top: 2em!important;
+}
+
+/* Login Screen */
+
+div#customer_login input {
+    background-color: #fff;
+    box-shadow: none;
+    border: solid 1px #707070;
+}
+
+div#customer_login .col-1 button {
+    background-color: rgb(var(--secondary));
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+	margin-top: 2em;
+	color: #fff;
+}
+
+div#customer_login .col-2 {
+    padding: 2em min(5vw, 5em);
+    background-color: rgb(var(--secondary));
+}
+
+div#customer_login .col-2 * {
+    color: #fff;
+}
+
+div#customer_login .col-2 button {
+    background-color: rgb(var(--primary));
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* Logged In Styles */
+
+.woocommerce-account #main .woocommerce {
+    display: flex;
+    gap: 2em;
+    flex-direction: column-reverse;
+}
+
+nav.woocommerce-MyAccount-navigation {
+	width: 100%;
+    margin: 0;
+    float: none;
+}
+
+nav.woocommerce-MyAccount-navigation ul {
+	display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 2em;
+	border-top: none!important;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link {
+    border: none!important;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link.is-active {
+    display: none;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #000;
+	padding: 2em!important;
+	background: #f4f4f4;
+	height: 100%;
+    display: grid!important;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a::before {
+	content: none!important;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a::after {
+	display: inline-block;
+    background: rgb(var(--secondary));
+    color: #fff;
+    margin-top: 1em;
+	line-height: 1;
+    padding: 0.85rem 2rem;
+    width: fit-content;
+    font-size: 14px;
+	transition: 300ms;
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a:hover::after {
+	background: rgb(var(--secondary) / 80%);
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--dashboard a::after {
+	content: "Visit Dashboard";
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--orders a::after {
+	content: "View Orders";
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--downloads a::after {
+	content: "View Downloads";
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--edit-address a::after {
+	content: "Edit Address";
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--edit-account a::after {
+	content: "Edit Account";
+}
+
+nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--customer-logout a::after {
+	content: "Log out";
+}
+
+/* Update Layout of Account page when editing info - Sorry it's a mess */
+
+.woocommerce-account.woocommerce-downloads #main .woocommerce, 
+.woocommerce-account.woocommerce-orders #main .woocommerce, 
+.woocommerce-account.woocommerce-edit-address #main .woocommerce, 
+.woocommerce-account.woocommerce-edit-account #main .woocommerce {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+}
+
+
+.woocommerce-account.woocommerce-downloads #main .woocommerce .woocommerce-MyAccount-content,
+.woocommerce-account.woocommerce-orders #main .woocommerce .woocommerce-MyAccount-content,
+.woocommerce-account.woocommerce-edit-address #main .woocommerce .woocommerce-MyAccount-content, 
+.woocommerce-account.woocommerce-edit-account #main .woocommerce .woocommerce-MyAccount-content {
+    width: 100%;
+}
+
+.woocommerce-downloads nav.woocommerce-MyAccount-navigation ul,
+.woocommerce-orders nav.woocommerce-MyAccount-navigation ul,
+.woocommerce-edit-account nav.woocommerce-MyAccount-navigation ul,
+.woocommerce-edit-address nav.woocommerce-MyAccount-navigation ul {
+	gap: 0!important;
+}
+
+.woocommerce-downloads #main li a,
+.woocommerce-orders #main li a,
+.woocommerce-edit-account #main li a,
+.woocommerce-edit-address #main li a {
+    padding: 1em 0!important;
+    border-bottom: solid 1px #E0E0E0;
+    background-color: #fff;
+}
+
+.woocommerce-downloads #main li a:hover,
+.woocommerce-orders #main li a:hover,
+.woocommerce-edit-account #main li a:hover,
+.woocommerce-edit-address #main li a:hover {
+    background-color: #f4f4f4;
+}
+
+.woocommerce-downloads li a::after,
+.woocommerce-orders li a::after,
+.woocommerce-edit-address li a::after,
+.woocommerce-edit-account li a::after {
+	content: none!important;
+}

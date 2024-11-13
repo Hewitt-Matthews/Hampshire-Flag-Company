@@ -1,0 +1,91 @@
+.woocommerce-checkout #page .hentry.type-page .entry-header {
+    margin-top: 3em!important;
+    text-align: center;
+}
+
+.woocommerce-form-login-toggle .woocommerce-info {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 5px 15px -5px;
+    border-left: none;
+    text-align: center;
+}
+
+.woocommerce-form-login-toggle .woocommerce-info a {
+    color: rgb(var(--primary));
+    font-weight: 500;
+}
+
+/* Left Side Fields */
+
+.woocommerce-checkout #page .woocommerce-billing-fields h3 {
+    border-bottom: solid;
+    margin-bottom: 1em;
+}
+
+.woocommerce-checkout #page .form-row label {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.woocommerce-checkout #page .form-row input {
+    background-color: #fff;
+    box-shadow: none;
+    border: solid 1px;
+}
+
+.woocommerce-checkout #page .select2-container--default .select2-selection--single {
+    border: solid 1px;
+    border-radius: 0;
+}
+
+.woocommerce-checkout #page span.select2-dropdown.select2-dropdown--below {
+    border-color: #000;
+}
+
+/* Checkout Button + Disclaimer */
+
+.woocommerce-checkout #page .form-row.place-order {
+    padding: 0;
+    background-color: #fff;
+}
+
+.woocommerce-privacy-policy-text {
+    background-color: rgb(var(--secondary));
+    color: #fff;
+    padding: 1.5em 2em;
+    margin-bottom: 2em;
+}
+
+.woocommerce-privacy-policy-text p {
+    margin: 0;
+}
+
+.woocommerce-privacy-policy-text p::before {
+    content: "Disclaimer";
+    display: block;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 0.5em;
+}
+
+.woocommerce-privacy-policy-text a {
+    color: rgb(var(--primary));
+    font-weight: 700;
+}
+
+
+.woocommerce-checkout #page #payment .place-order .button {
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: rgb(var(--primary));
+}
+
+.woocommerce-checkout #page #payment .place-order .button:hover {
+    background-color: rgb(var(--primary) / 90%);
+}
