@@ -242,19 +242,6 @@ function custom_bunting_scripts_and_styles() {
 					const formattedTotalPrice = document.querySelector('.formattedTotalPrice');
 					const dynamicPriceEl = document.querySelector('.product_totals ul > li:last-of-type > div');
 
-					function getBasePrice() {
-						// Get the initial per-length price from the dynamic price element
-						if (dynamicPriceEl) {
-							const priceText = dynamicPriceEl.textContent.replace('£', '');
-							const basePrice = parseFloat(priceText);
-							console.log('Initial per-length price:', basePrice);
-							return basePrice;
-						}
-						
-						console.warn('Dynamic price element not found');
-						return null;
-					}
-
 					// Define discount tiers
 					const productDiscounts = {
 						"1 - 2": "0%",
@@ -273,9 +260,82 @@ function custom_bunting_scripts_and_styles() {
 						quantityField.appendChild(quantityMessageEl);
 					}
 
-					// Store the original base price when the page loads
-					const originalBasePrice = getBasePrice();
-					console.log('Original base price:', originalBasePrice);
+					// Get initial base price from the starting price display
+					const startingPriceEl = document.querySelector('.starting-from .amount');
+					let basePrice = null;
+					
+					if (startingPriceEl) {
+						basePrice = parseFloat(startingPriceEl.textContent.replace('£', '').trim());
+						console.log('Initial base price:', basePrice);
+					}
+
+					if (!basePrice) {
+						console.error('Could not get base price');
+						return;
+					}
+
+					function calculateDiscountedPrice(basePrice, discountPercentage) {
+						console.log('Calculating discount:', { basePrice, discountPercentage });
+						
+						if (!discountPercentage || discountPercentage === "0%") {
+							return basePrice;
+						}
+						
+						// Extract just the number from the discount percentage
+						const discountAmount = parseFloat(discountPercentage.replace('%', ''));
+						console.log('Discount amount:', discountAmount);
+						
+						// Calculate the discounted price
+						const discountMultiplier = (100 - discountAmount) / 100;
+						const discountedPrice = basePrice * discountMultiplier;
+						console.log('Discounted price before rounding:', discountedPrice);
+						
+						// Round up to 2 decimal places
+						const roundedPrice = Math.ceil(discountedPrice * 100) / 100;
+						console.log('Final rounded price:', roundedPrice);
+						
+						return roundedPrice;
+					}
+
+					function updatePrices(quantity, discount) {
+						console.log('Starting price calculation with:', { basePrice, quantity, discount });
+
+						// Calculate the discounted unit price
+						const discountedUnitPrice = calculateDiscountedPrice(basePrice, discount);
+						console.log('Discounted unit price:', discountedUnitPrice);
+
+						// Calculate total price
+						const totalPrice = (discountedUnitPrice * quantity).toFixed(2);
+						console.log('Total price:', totalPrice);
+
+						// Update the unit price display
+						if (dynamicPriceEl) {
+							dynamicPriceEl.innerHTML = '';
+							const priceSpan = document.createElement('span');
+							priceSpan.textContent = `£${discountedUnitPrice.toFixed(2)}`;
+							dynamicPriceEl.appendChild(priceSpan);
+							
+							const perLengthText = document.createElement('p');
+							perLengthText.textContent = ' per length';
+							perLengthText.classList.add('per-length-text');
+							dynamicPriceEl.appendChild(perLengthText);
+						}
+
+						// Update the total price displays
+						if (totalPriceCalculation) {
+							totalPriceCalculation.textContent = totalPrice;
+						}
+
+						if (formattedTotalPrice) {
+							formattedTotalPrice.textContent = `£${totalPrice}`;
+						}
+
+						// Update Gravity Forms price if needed
+						const gravityFormPrice = document.querySelector('.ginput_container_singleproduct .ginput_amount');
+						if (gravityFormPrice) {
+							gravityFormPrice.value = discountedUnitPrice.toFixed(2);
+						}
+					}
 
 					customQuanityField.addEventListener('input', (e) => {
 						const quantity = parseInt(e.target.value) || 1;
@@ -311,50 +371,6 @@ function custom_bunting_scripts_and_styles() {
 
 						updatePrices(quantity, currentDiscount);
 					});
-
-					function updatePrices(quantity, discount) {
-						// Use the original base price for calculations
-						if (!originalBasePrice) {
-							console.error('Original base price not found');
-							return;
-						}
-
-						// Calculate discounted unit price
-						const discountedUnitPrice = calculateDiscountedPrice(originalBasePrice, discount || "0%").toFixed(2);
-						
-						// Calculate total price
-						const totalPrice = (discountedUnitPrice * quantity).toFixed(2);
-
-						// Update displays
-						if (totalPriceCalculation) {
-							totalPriceCalculation.textContent = totalPrice;
-						}
-
-						if (formattedTotalPrice) {
-							formattedTotalPrice.textContent = `£${totalPrice}`;
-						}
-
-						if (dynamicPriceEl) {
-							// Clear the dynamic price element
-							dynamicPriceEl.innerHTML = '';
-							
-							// Add the price
-							const priceSpan = document.createElement('span');
-							priceSpan.textContent = `£${discountedUnitPrice}`;
-							dynamicPriceEl.appendChild(priceSpan);
-							
-							// Always add the per length text
-							const perLengthText = document.createElement('p');
-							perLengthText.textContent = ' per length';
-							perLengthText.classList.add('per-length-text');
-							dynamicPriceEl.appendChild(perLengthText);
-						}
-
-						// Clear discount message if quantity is 1
-						if (quantity === 1) {
-							quantityMessageEl.textContent = `Add 2 more to your basket to qualify for a 2.5% discount to this item.`;
-						}
-					}
 
 					// Initial calculation
 					updatePrices(1, "0%");
