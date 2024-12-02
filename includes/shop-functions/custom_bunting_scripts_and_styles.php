@@ -241,6 +241,9 @@ function custom_bunting_scripts_and_styles() {
 					const totalPriceCalculation = document.querySelector('.total-calculated-price');
 					const formattedTotalPrice = document.querySelector('.formattedTotalPrice');
 					const dynamicPriceEl = document.querySelector('.product_totals ul > li:last-of-type > div');
+					
+					// Get initial base price
+					const basePrice = 7.36;
 
 					// Define discount tiers
 					const productDiscounts = {
@@ -252,129 +255,74 @@ function custom_bunting_scripts_and_styles() {
 						"250 - 9999999": "12.5%"
 					};
 
-					// Create a message element for quantity-based messages
-					const quantityMessageEl = document.createElement('p');
-					quantityMessageEl.classList.add('quantity-message');
-					const quantityField = customQuanityField.closest('.gfield');
-					if (quantityField) {
-						quantityField.appendChild(quantityMessageEl);
-					}
-
-					// Get initial base price from the starting price display
-					const startingPriceEl = document.querySelector('.starting-from .amount');
-					let basePrice = null;
-					
-					if (startingPriceEl) {
-						basePrice = parseFloat(startingPriceEl.textContent.replace('£', '').trim());
-						console.log('Initial base price:', basePrice);
-					}
-
-					if (!basePrice) {
-						console.error('Could not get base price');
-						return;
-					}
-
-					function calculateDiscountedPrice(basePrice, discountPercentage) {
-						console.log('Calculating discount:', { basePrice, discountPercentage });
-						
+					function calculateDiscountedPrice(price, discountPercentage) {
 						if (!discountPercentage || discountPercentage === "0%") {
-							return basePrice;
+							return price;
 						}
-						
-						// Extract just the number from the discount percentage
 						const discountAmount = parseFloat(discountPercentage.replace('%', ''));
-						console.log('Discount amount:', discountAmount);
-						
-						// Calculate the discounted price
-						const discountMultiplier = (100 - discountAmount) / 100;
-						const discountedPrice = basePrice * discountMultiplier;
-						console.log('Discounted price before rounding:', discountedPrice);
-						
-						// Round up to 2 decimal places
-						const roundedPrice = Math.ceil(discountedPrice * 100) / 100;
-						console.log('Final rounded price:', roundedPrice);
-						
-						return roundedPrice;
+						return price * (1 - discountAmount / 100);
 					}
 
-					function updatePrices(quantity, discount) {
-						console.log('Starting price calculation with:', { basePrice, quantity, discount });
-
-						// Calculate the discounted unit price
-						const discountedUnitPrice = calculateDiscountedPrice(basePrice, discount);
-						console.log('Discounted unit price:', discountedUnitPrice);
-
-						// Calculate total price
-						const totalPrice = (discountedUnitPrice * quantity).toFixed(2);
-						console.log('Total price:', totalPrice);
-
-						// Update the unit price display
-						if (dynamicPriceEl) {
-							dynamicPriceEl.innerHTML = '';
-							const priceSpan = document.createElement('span');
-							priceSpan.textContent = `£${discountedUnitPrice.toFixed(2)}`;
-							dynamicPriceEl.appendChild(priceSpan);
-							
-							const perLengthText = document.createElement('p');
-							perLengthText.textContent = ' per length';
-							perLengthText.classList.add('per-length-text');
-							dynamicPriceEl.appendChild(perLengthText);
-						}
-
-						// Update the total price displays
-						if (totalPriceCalculation) {
-							totalPriceCalculation.textContent = totalPrice;
-						}
-
-						if (formattedTotalPrice) {
-							formattedTotalPrice.textContent = `£${totalPrice}`;
-						}
-
-						// Update Gravity Forms price if needed
-						const gravityFormPrice = document.querySelector('.ginput_container_singleproduct .ginput_amount');
-						if (gravityFormPrice) {
-							gravityFormPrice.value = discountedUnitPrice.toFixed(2);
-						}
-					}
+					// Create message element for quantity-based discounts
+					const quantityMessageEl = document.createElement('p');
+					quantityMessageEl.classList.add('add-more-message');
+					customQuanityField.after(quantityMessageEl);
 
 					customQuanityField.addEventListener('input', (e) => {
 						const quantity = parseInt(e.target.value) || 1;
 						defaultQuanityField.value = quantity;
 
-						let currentDiscount = null;
+						// Find applicable discount
+						let currentDiscount = "0%";
 						for (const range in productDiscounts) {
 							const [min, max] = range.split(' - ').map(Number);
-							if (quantity < min) {
-								currentDiscount = null;
-								if (quantity <= 2) {
-									quantityMessageEl.textContent = `Add ${3 - quantity} more to your basket to qualify for a 2.5% discount to this item.`;
-								} else {
-									quantityMessageEl.textContent = `Add ${min - quantity} more to your basket to qualify for a further discount to this item.`;
-								}
-								break;
-							}
-
 							if (quantity >= min && quantity <= max) {
 								currentDiscount = productDiscounts[range];
-								if (currentDiscount === "12.5%") {
-									quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item.`;
-								} else if (currentDiscount === "0%") {
-									const nextMin = Object.keys(productDiscounts)[Object.keys(productDiscounts).indexOf(range) + 1].split(' - ')[0];
-									quantityMessageEl.textContent = `Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
-								} else {
-									const nextMin = Object.keys(productDiscounts)[Object.keys(productDiscounts).indexOf(range) + 1].split(' - ')[0];
-									quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item! Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
-								}
 								break;
 							}
 						}
 
-						updatePrices(quantity, currentDiscount);
+						// Calculate discounted prices
+						const discountedUnitPrice = calculateDiscountedPrice(basePrice, currentDiscount);
+						const totalPrice = (discountedUnitPrice * quantity).toFixed(2);
+
+						console.log('Price calculation:', {
+							quantity,
+							basePrice,
+							currentDiscount,
+							discountedUnitPrice,
+							totalPrice
+						});
+
+						// Update displays using the console-verified values
+						document.querySelectorAll('.ginput_total, .total-calculated-price, .formattedTotalPrice').forEach(el => {
+							el.textContent = totalPrice;
+						});
+
+						// Update unit price display
+						if (dynamicPriceEl) {
+							dynamicPriceEl.innerHTML = `£${discountedUnitPrice.toFixed(2)}<p class="per-length-text"> per length</p>`;
+						}
+
+						// Update discount message
+						if (quantity <= 2) {
+							quantityMessageEl.textContent = `Add ${3 - quantity} more to your basket to qualify for a 2.5% discount to this item.`;
+						} else if (currentDiscount === "12.5%") {
+							quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item.`;
+						} else {
+							const ranges = Object.keys(productDiscounts);
+							const currentIndex = ranges.findIndex(range => productDiscounts[range] === currentDiscount);
+							if (currentIndex < ranges.length - 1) {
+								const nextRange = ranges[currentIndex + 1];
+								const nextMin = parseInt(nextRange.split(' - ')[0]);
+								quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item! Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
+							}
+						}
 					});
 
 					// Initial calculation
-					updatePrices(1, "0%");
-				})
+					customQuanityField.dispatchEvent(new Event('input'));
+				});
 			}
 
         </script>
