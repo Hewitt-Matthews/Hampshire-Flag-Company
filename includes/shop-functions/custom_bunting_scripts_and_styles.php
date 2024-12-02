@@ -295,122 +295,55 @@ function custom_bunting_scripts_and_styles() {
 						updatePrices();
 					});
 
-					function updatePrices() {
-						const unitPrice = document.querySelector('.formattedTotalPrice, .ginput_total');
-						if (!unitPrice) {
-							console.error('Unit price element not found');
-							return;
+					// Get the base price from Gravity Forms
+					const getBasePrice = () => {
+						const gravityFormPrice = document.querySelector('.ginput_container_singleproduct .ginput_amount');
+						if (gravityFormPrice) {
+							return parseFloat(gravityFormPrice.value.replace(/[^0-9.]/g, ''));
 						}
+						return null;
+					};
 
-						const unitPriceText = unitPrice.innerText;
-						const unitPriceValue = parseFloat(unitPriceText.replace(/[^0-9.]/g, ''));
-						const totalPriceCalculation = document.querySelector('.total-calculated-price');
-						if (!totalPriceCalculation) {
-							console.error('Total price calculation element not found');
+					function updatePrices() {
+						const quantity = parseInt(customQuanityField.value) || 1;
+						const basePrice = getBasePrice();
+						
+						if (!basePrice) {
+							console.error('Base price not found in Gravity Forms');
 							return;
 						}
 
 						let totalPrice;
-
 						if (!discount) {
-							totalPrice = (customQuanityField.value * unitPriceValue).toFixed(2);
+							totalPrice = (quantity * basePrice).toFixed(2);
 						} else {
 							const currentDiscount = parseFloat(discount.replace("%", ""));
-							const discountAmount = (unitPriceValue / 100) * currentDiscount;
-							const discountedUnitPrice = Math.ceil((unitPriceValue - discountAmount) * 100) / 100;
-							totalPrice = (customQuanityField.value * discountedUnitPrice).toFixed(2);
+							const discountAmount = (basePrice / 100) * currentDiscount;
+							const discountedUnitPrice = Math.ceil((basePrice - discountAmount) * 100) / 100;
+							totalPrice = (quantity * discountedUnitPrice).toFixed(2);
 						}
 
-						totalPriceCalculation.textContent = totalPrice;
-						
-						// Update the unit price display
-						const perLengthText = document.querySelector('.per-length-text');
-						if (discount && dynamicPriceEl) {
-							const discountedUnitPrice = (unitPriceValue * (1 - parseFloat(discount) / 100)).toFixed(2);
-							dynamicPriceEl.innerHTML = `£${discountedUnitPrice}`;
+						// Update displays
+						if (totalPriceCalculation) {
+							totalPriceCalculation.textContent = totalPrice;
+						}
+						if (formattedTotalPrice) {
+							formattedTotalPrice.textContent = `£${totalPrice}`;
+						}
+						if (dynamicPriceEl) {
+							const unitPrice = discount ? 
+								(basePrice * (1 - parseFloat(discount) / 100)).toFixed(2) : 
+								basePrice.toFixed(2);
+							dynamicPriceEl.innerHTML = `£${unitPrice}`;
+							const perLengthText = document.querySelector('.per-length-text');
 							if (perLengthText) {
 								dynamicPriceEl.appendChild(perLengthText);
 							}
 						}
-
-						// Update the formattedTotalPrice element
-						const formattedTotalPrice = document.querySelector('.formattedTotalPrice, .ginput_total');
-						if (formattedTotalPrice) {
-							formattedTotalPrice.textContent = `£${totalPrice}`;
-							if (!formattedTotalPrice.classList.contains('formattedTotalPrice')) {
-								formattedTotalPrice.classList.add('formattedTotalPrice');
-							}
-						}
 					}
 
-					// Get the quantity input from the ginput_container_number
-					const quantityInput = document.querySelector('.ginput_container_number input');
-					
-					if (quantityInput) {
-						console.log('Quantity input found:', quantityInput);
-						
-						// Function to get the initial price
-						const getInitialPrice = () => {
-							// Try getting price from different possible sources
-							const sources = [
-								'.starting-from .amount',
-								'.ginput_container .ginput_total',
-								'.formattedTotalPrice'
-							];
-							
-							for (const selector of sources) {
-								const priceEl = document.querySelector(selector);
-								if (priceEl) {
-									const price = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, ''));
-									if (price > 0) {
-										console.log('Found initial price:', price);
-										return price;
-									}
-								}
-							}
-							return 7.36; // Fallback to default price if none found
-						};
-
-						quantityInput.addEventListener('input', function(e) {
-							const quantity = parseInt(e.target.value) || 1;
-							console.log('New quantity:', quantity);
-							
-							// Update the default quantity field
-							if (defaultQuanityField) {
-								defaultQuanityField.value = quantity;
-							}
-							
-							// Get the base unit price
-							const unitPrice = getInitialPrice();
-							console.log('Unit price:', unitPrice);
-							
-							// Calculate the new total
-							let totalPrice;
-							if (!discount) {
-								totalPrice = (quantity * unitPrice).toFixed(2);
-							} else {
-								const currentDiscount = parseFloat(discount.replace("%", ""));
-								const discountAmount = (unitPrice / 100) * currentDiscount;
-								const discountedUnitPrice = Math.ceil((unitPrice - discountAmount) * 100) / 100;
-								totalPrice = (quantity * discountedUnitPrice).toFixed(2);
-							}
-							console.log('Calculated total price:', totalPrice);
-							
-							// Update all price displays
-							const priceDisplays = {
-								'.total-calculated-price': totalPrice,
-								'.formattedTotalPrice': `£${totalPrice}`,
-								'.ginput_total': `£${totalPrice}`
-							};
-
-							for (const [selector, value] of Object.entries(priceDisplays)) {
-								const element = document.querySelector(selector);
-								if (element) {
-									element.textContent = value;
-								}
-							}
-						});
-					}
+					// Update prices whenever quantity changes
+					customQuanityField.addEventListener('input', updatePrices);
 				})
 			}
 
