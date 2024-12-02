@@ -342,6 +342,75 @@ function custom_bunting_scripts_and_styles() {
 							}
 						}
 					}
+
+					// Get the quantity input from the ginput_container_number
+					const quantityInput = document.querySelector('.ginput_container_number input');
+					
+					if (quantityInput) {
+						console.log('Quantity input found:', quantityInput);
+						
+						// Function to get the initial price
+						const getInitialPrice = () => {
+							// Try getting price from different possible sources
+							const sources = [
+								'.starting-from .amount',
+								'.ginput_container .ginput_total',
+								'.formattedTotalPrice'
+							];
+							
+							for (const selector of sources) {
+								const priceEl = document.querySelector(selector);
+								if (priceEl) {
+									const price = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, ''));
+									if (price > 0) {
+										console.log('Found initial price:', price);
+										return price;
+									}
+								}
+							}
+							return 7.36; // Fallback to default price if none found
+						};
+
+						quantityInput.addEventListener('input', function(e) {
+							const quantity = parseInt(e.target.value) || 1;
+							console.log('New quantity:', quantity);
+							
+							// Update the default quantity field
+							if (defaultQuanityField) {
+								defaultQuanityField.value = quantity;
+							}
+							
+							// Get the base unit price
+							const unitPrice = getInitialPrice();
+							console.log('Unit price:', unitPrice);
+							
+							// Calculate the new total
+							let totalPrice;
+							if (!discount) {
+								totalPrice = (quantity * unitPrice).toFixed(2);
+							} else {
+								const currentDiscount = parseFloat(discount.replace("%", ""));
+								const discountAmount = (unitPrice / 100) * currentDiscount;
+								const discountedUnitPrice = Math.ceil((unitPrice - discountAmount) * 100) / 100;
+								totalPrice = (quantity * discountedUnitPrice).toFixed(2);
+							}
+							console.log('Calculated total price:', totalPrice);
+							
+							// Update all price displays
+							const priceDisplays = {
+								'.total-calculated-price': totalPrice,
+								'.formattedTotalPrice': `£${totalPrice}`,
+								'.ginput_total': `£${totalPrice}`
+							};
+
+							for (const [selector, value] of Object.entries(priceDisplays)) {
+								const element = document.querySelector(selector);
+								if (element) {
+									element.textContent = value;
+								}
+							}
+						});
+					}
 				})
 			}
 
