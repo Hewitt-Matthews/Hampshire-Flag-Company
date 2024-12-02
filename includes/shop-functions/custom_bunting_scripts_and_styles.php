@@ -242,8 +242,15 @@ function custom_bunting_scripts_and_styles() {
 					const formattedTotalPrice = document.querySelector('.formattedTotalPrice');
 					const dynamicPriceEl = document.querySelector('.product_totals ul > li:last-of-type > div');
 					
-					// Get initial base price
-					const basePrice = 7.36;
+					// Get base price from Gravity Forms
+					function getBasePrice() {
+						const gravityFormPrice = document.querySelector('.ginput_container_singleproduct .ginput_amount');
+						if (gravityFormPrice) {
+							return parseFloat(gravityFormPrice.value.replace(/[^0-9.]/g, ''));
+						}
+						console.warn('Could not find Gravity Forms price field');
+						return null;
+					}
 
 					// Define discount tiers
 					const productDiscounts = {
@@ -268,9 +275,14 @@ function custom_bunting_scripts_and_styles() {
 					quantityMessageEl.classList.add('add-more-message');
 					customQuanityField.after(quantityMessageEl);
 
+					// Your working price calculation code
 					customQuanityField.addEventListener('input', (e) => {
 						const quantity = parseInt(e.target.value) || 1;
 						defaultQuanityField.value = quantity;
+
+						// Get current base price
+						const basePrice = getBasePrice();
+						if (!basePrice) return;
 
 						// Find applicable discount
 						let currentDiscount = "0%";
