@@ -242,16 +242,6 @@ function custom_bunting_scripts_and_styles() {
 					const formattedTotalPrice = document.querySelector('.formattedTotalPrice');
 					const dynamicPriceEl = document.querySelector('.product_totals ul > li:last-of-type > div');
 
-					// Define discount tiers
-					const productDiscounts = {
-						"1 - 2": "0%",
-						"3 - 4": "2.5%",
-						"5 - 9": "5%",
-						"10 - 49": "7.5%",
-						"50 - 249": "10%",
-						"250 - 9999999": "12.5%"
-					};
-
 					function getBasePrice() {
 						// Get the initial per-length price from the dynamic price element
 						if (dynamicPriceEl) {
@@ -265,19 +255,54 @@ function custom_bunting_scripts_and_styles() {
 						return null;
 					}
 
-					function getDiscount(quantity) {
-						console.log('Checking discount for quantity:', quantity);
-						for (const [range, discount] of Object.entries(productDiscounts)) {
-							const [min, max] = range.split(' - ').map(num => parseInt(num));
-							console.log(`Checking range ${min}-${max}, discount: ${discount}`);
+					// Define discount tiers
+					const productDiscounts = {
+						"1 - 2": "0%",
+						"3 - 4": "2.5%",
+						"5 - 9": "5%",
+						"10 - 49": "7.5%",
+						"50 - 249": "10%",
+						"250 - 9999999": "12.5%"
+					};
+
+					// Create a message element for quantity-based messages
+					const quantityMessageEl = document.createElement('p');
+					quantityMessageEl.classList.add('quantity-message');
+					const quantityField = customQuanityField.closest('.gfield');
+					if (quantityField) {
+						quantityField.appendChild(quantityMessageEl);
+					}
+
+					customQuanityField.addEventListener('input', (e) => {
+						const quantity = parseInt(e.target.value) || 1; // Default to 1 if parsing fails
+						defaultQuanityField.value = quantity;
+
+						let discount = null;
+						for (const range in productDiscounts) {
+							const [min, max] = range.split(' - ').map(Number);
+							if (quantity < min) {
+								discount = null;
+								quantityMessageEl.textContent = `Add ${min - quantity} more to your basket to qualify for a 2.5% discount to this item.`;
+								break;
+							}
+
 							if (quantity >= min && quantity <= max) {
-								console.log('Found matching discount:', discount);
-								return discount;
+								discount = productDiscounts[range];
+								if (discount === "12.5%") {
+									quantityMessageEl.textContent = `You're currently getting ${discount} off this item.`;
+								} else if (discount === "0%") {
+									const nextMin = Object.keys(productDiscounts)[Object.keys(productDiscounts).indexOf(range) + 1].split(' - ')[0];
+									quantityMessageEl.textContent = `Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
+								} else {
+									const nextMin = Object.keys(productDiscounts)[Object.keys(productDiscounts).indexOf(range) + 1].split(' - ')[0];
+									quantityMessageEl.textContent = `You're currently getting ${discount} off this item! Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
+								}
+								break;
 							}
 						}
-						console.log('No matching discount found, returning 0%');
-						return "0%";
-					}
+
+						updatePrices();
+					});
 
 					function updatePrices() {
 						const quantity = parseInt(customQuanityField.value) || 1;
@@ -300,8 +325,6 @@ function custom_bunting_scripts_and_styles() {
 							discountedUnitPrice = (basePrice - discountAmount).toFixed(2);
 							console.log('Discount Amount:', discountAmount);
 							console.log('Discounted Unit Price:', discountedUnitPrice);
-						} else {
-							console.log('No discount applied');
 						}
 
 						const totalPrice = (quantity * discountedUnitPrice).toFixed(2);
@@ -317,32 +340,20 @@ function custom_bunting_scripts_and_styles() {
 						}
 
 						if (dynamicPriceEl) {
-							dynamicPriceEl.innerHTML = `£${discountedUnitPrice}`;
-							const perLengthText = document.querySelector('.per-length-text');
-							if (perLengthText) {
-								dynamicPriceEl.appendChild(perLengthText);
-							}
+							// Clear the dynamic price element
+							dynamicPriceEl.innerHTML = '';
+							
+							// Add the price
+							const priceSpan = document.createElement('span');
+							priceSpan.textContent = `£${discountedUnitPrice}`;
+							dynamicPriceEl.appendChild(priceSpan);
+							
+							// Always add the per length text
+							const perLengthText = document.createElement('p');
+							perLengthText.textContent = ' per length';
+							perLengthText.classList.add('per-length-text');
+							dynamicPriceEl.appendChild(perLengthText);
 						}
-
-						// Add message about current discount if applicable
-						const existingMessage = document.querySelector('.add-more-message');
-						if (existingMessage) {
-							existingMessage.remove();
-						}
-
-						if (discount !== "0%") {
-							const messageEl = document.createElement('p');
-							messageEl.classList.add('add-more-message');
-							messageEl.textContent = `A ${discount} discount has been applied!`;
-							dynamicPriceEl.parentElement.appendChild(messageEl);
-						}
-					}
-
-					// Attach event listener to update prices
-					if (customQuanityField) {
-						customQuanityField.addEventListener('input', updatePrices);
-						// Initial calculation
-						updatePrices();
 					}
 				})
 			}
