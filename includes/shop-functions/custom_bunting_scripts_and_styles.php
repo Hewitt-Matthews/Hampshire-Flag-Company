@@ -238,36 +238,26 @@ function custom_bunting_scripts_and_styles() {
 					// Define all our DOM elements at the top
 					const customQuanityField = document.querySelector('.gfield--type-number input');
 					const defaultQuanityField = document.querySelector('input[name="quantity"]');
-					const totalPriceCalculation = document.querySelector('.total-calculated-price');
 					const formattedTotalPrice = document.querySelector('.formattedTotalPrice');
-					const dynamicPriceEl = document.querySelector('.product_totals ul > li:last-of-type > div');
 					
-					// Get base price from Gravity Forms
+					// Get base price from the formatted total price element
 					function getBasePrice() {
-						const gravityFormPrice = document.querySelector('.ginput_container_singleproduct .ginput_amount');
-						if (gravityFormPrice) {
-							return parseFloat(gravityFormPrice.value.replace(/[^0-9.]/g, ''));
-						}
-						console.warn('Could not find Gravity Forms price field');
-						return null;
+						const priceText = formattedTotalPrice.textContent;
+						return parseFloat(priceText.replace(/[^0-9.]/g, ''));
 					}
 
 					// Define discount tiers
 					const productDiscounts = {
-						"1 - 2": "0%",
-						"3 - 4": "2.5%",
-						"5 - 9": "5%",
-						"10 - 49": "7.5%",
-						"50 - 249": "10%",
-						"250 - 9999999": "12.5%"
+						"1 - 2": 0,
+						"3 - 4": 2.5,
+						"5 - 9": 5,
+						"10 - 49": 7.5,
+						"50 - 249": 10,
+						"250 - 9999999": 12.5
 					};
 
 					function calculateDiscountedPrice(price, discountPercentage) {
-						if (!discountPercentage || discountPercentage === "0%") {
-							return price;
-						}
-						const discountAmount = parseFloat(discountPercentage.replace('%', ''));
-						return price * (1 - discountAmount / 100);
+						return price * (1 - discountPercentage / 100);
 					}
 
 					// Create message element for quantity-based discounts
@@ -275,17 +265,15 @@ function custom_bunting_scripts_and_styles() {
 					quantityMessageEl.classList.add('add-more-message');
 					customQuanityField.after(quantityMessageEl);
 
-					// Your working price calculation code
+					// Price calculation code
 					customQuanityField.addEventListener('input', (e) => {
 						const quantity = parseInt(e.target.value) || 1;
 						defaultQuanityField.value = quantity;
 
-						// Get current base price
 						const basePrice = getBasePrice();
-						if (!basePrice) return;
 
 						// Find applicable discount
-						let currentDiscount = "0%";
+						let currentDiscount = 0;
 						for (const range in productDiscounts) {
 							const [min, max] = range.split(' - ').map(Number);
 							if (quantity >= min && quantity <= max) {
@@ -294,40 +282,33 @@ function custom_bunting_scripts_and_styles() {
 							}
 						}
 
-						// Calculate discounted prices
+						// Calculate discounted unit price
 						const discountedUnitPrice = calculateDiscountedPrice(basePrice, currentDiscount);
+						
+						// Calculate total price
 						const totalPrice = (discountedUnitPrice * quantity).toFixed(2);
 
-						console.log('Price calculation:', {
-							quantity,
-							basePrice,
-							currentDiscount,
-							discountedUnitPrice,
-							totalPrice
-						});
+						// Update per-length price
+						formattedTotalPrice.textContent = `£${discountedUnitPrice.toFixed(2)}`;
 
-						// Update displays using the console-verified values
-						document.querySelectorAll('.ginput_total, .total-calculated-price, .formattedTotalPrice').forEach(el => {
-							el.textContent = totalPrice;
-						});
-
-						// Update unit price display
-						if (dynamicPriceEl) {
-							dynamicPriceEl.innerHTML = `£${discountedUnitPrice.toFixed(2)}<p class="per-length-text"> per length</p>`;
+						// Update total price
+						const totalPriceEl = document.querySelector('.total-calculated-price');
+						if (totalPriceEl) {
+							totalPriceEl.textContent = totalPrice;
 						}
 
 						// Update discount message
 						if (quantity <= 2) {
 							quantityMessageEl.textContent = `Add ${3 - quantity} more to your basket to qualify for a 2.5% discount to this item.`;
-						} else if (currentDiscount === "12.5%") {
-							quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item.`;
+						} else if (currentDiscount === 12.5) {
+							quantityMessageEl.textContent = `You're currently getting ${currentDiscount}% off this item.`;
 						} else {
 							const ranges = Object.keys(productDiscounts);
 							const currentIndex = ranges.findIndex(range => productDiscounts[range] === currentDiscount);
 							if (currentIndex < ranges.length - 1) {
 								const nextRange = ranges[currentIndex + 1];
 								const nextMin = parseInt(nextRange.split(' - ')[0]);
-								quantityMessageEl.textContent = `You're currently getting ${currentDiscount} off this item! Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
+								quantityMessageEl.textContent = `You're currently getting ${currentDiscount}% off this item! Add ${nextMin - quantity} more to your basket to qualify for a further discount to this item.`;
 							}
 						}
 					});
